@@ -57,8 +57,9 @@ module.exports = {
         year: '2019',
       },
       duration: null,
-      occupation: 'Desenvolvedor PHP',
-      description: 'Criação de módulos para framework de e-commerce Magento',
+      occupation: 'Desenvolvedor PHP e React',
+      description: `Criação de módulos para framework de e-commerce Magento.
+        Desenvolvimento de aplicação em React`,
     },
     {
       company: 'UFPR',
