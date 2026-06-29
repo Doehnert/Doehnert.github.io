@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { FormEvent, useRef, useState } from "react";
 
 type Message = {
@@ -61,31 +62,25 @@ export default function Home() {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: cleanQuestion }),
-      });
-
-      if (!response.ok) {
-        const data = (await response.json().catch(() => null)) as {
-          detail?: string;
-        } | null;
-        throw new Error(
-          data?.detail ?? "The assistant could not answer right now.",
-        );
-      }
-
-      const data: { answer: string } = await response.json();
+      const { data } = await axios.post<{ answer: string }>(
+        `${API_URL}/chat`,
+        { question: cleanQuestion },
+        { timeout: 60_000 },
+      );
       setMessages((current) => [
         ...current,
         { role: "assistant", content: data.answer },
       ]);
     } catch (requestError) {
+      const apiMessage = axios.isAxiosError<{ detail?: string }>(requestError)
+        ? requestError.response?.data?.detail
+        : undefined;
+
       setError(
-        requestError instanceof Error
+        apiMessage ??
+          (requestError instanceof Error
           ? requestError.message
-          : "Unable to reach the curriculum assistant.",
+          : "Unable to reach the curriculum assistant."),
       );
     } finally {
       setIsLoading(false);
