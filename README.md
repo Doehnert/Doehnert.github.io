@@ -18,14 +18,17 @@ The application uses a Next.js static export and is deployed by
 Before deploying:
 
 1. Open the GitHub repository.
-2. Go to **Settings → Pages** and select **GitHub Actions** as the source.
+2. Go to **Settings → Pages**, select **Deploy from a branch**, and choose the
+   `gh-pages` branch with the `/ (root)` folder.
 3. Go to **Settings → Secrets and variables → Actions → Variables**.
 4. Add `NEXT_PUBLIC_API_URL` with the public backend URL, for example
    `https://api.example.com`.
 5. Push to the `main` branch or manually run the workflow.
 
-The workflow automatically handles the repository subpath used by project Pages
-sites such as `https://username.github.io/repository-name/`.
+The workflow builds from `main` and publishes only the generated static files to
+an orphan `gh-pages` branch. Dependencies and build caches are not published.
+It also handles the repository subpath used by project Pages sites such as
+`https://username.github.io/repository-name/`.
 
 The backend must include the final Pages origin in `FRONTEND_ORIGINS`, without a
 path:
